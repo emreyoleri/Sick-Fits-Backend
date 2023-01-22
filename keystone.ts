@@ -1,7 +1,6 @@
 import { createAuth } from "@keystone-next/auth";
-import { config, createSchema } from "@keystone-next/keystone";
+import { config } from "@keystone-next/keystone";
 import {
-  withItemData,
   statelessSessions,
 } from "@keystone-next/keystone/session";
 import { permissionsList } from "./schemas/fields";
@@ -62,7 +61,7 @@ export default withAuth(
         }
       },
     },
-    lists: createSchema({
+    lists: {
       // Schema items go in here
       User,
       Product,
@@ -71,7 +70,7 @@ export default withAuth(
       OrderItem,
       Order,
       Role,
-    }),
+    },
     extendGraphqlSchema,
     ui: {
       // Show the UI only for poeple who pass this test
@@ -79,9 +78,9 @@ export default withAuth(
         // console.log(session);
         !!session?.data,
     },
-    session: withItemData(statelessSessions(sessionConfig), {
+    session: statelessSessions(sessionConfig), {
       // GraphQL Query
       User: `id name email role { ${permissionsList.join(" ")} }`,
-    }),
+    },
   })
 );
